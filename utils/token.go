@@ -10,7 +10,7 @@ import (
 
 func TokenCreate(ttl time.Duration, email string) (string, error) {
 	c := jwt.MapClaims{
-		"exp": time.Now().Add(time.Minute * time.Duration(ttl)).Unix(),
+		"exp": time.Now().Add(ttl).Unix(),
 		"iat": time.Now().Unix(),
 		"nbf": time.Now().Unix(),
 		"sub": email,
@@ -38,5 +38,10 @@ func TokenValidate(token string) (jwt.MapClaims, error) {
 		return nil, err
 	}
 
-	return t.Claims.(jwt.MapClaims), nil
+	claims, ok := t.Claims.(jwt.MapClaims)
+	if !ok || !t.Valid {
+		return nil, err
+	}
+
+	return claims, nil
 }

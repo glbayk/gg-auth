@@ -25,9 +25,7 @@ func init() {
 func main() {
 	router := gin.Default()
 
-	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowOrigins = []string{os.Getenv("URL") + ":" + os.Getenv("PORT")}
-	router.Use(cors.New(corsConfig))
+	router.Use(cors.Default())
 
 	// Health check endpoint
 	router.GET("/ping", func(ctx *gin.Context) {
